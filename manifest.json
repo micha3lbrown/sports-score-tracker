@@ -1,0 +1,68 @@
+{
+  "id": "sports_score_tracker",
+  "name": "Sports Score Tracker",
+  "version": "1.0.0",
+  "required_open_webui_version": "0.3.0",
+  "description": "Track live scores and updates for Duke, UNC, USC Gamecocks, and Clemson teams",
+  "icon": "🏀",
+  "author": "Your Name",
+  "author_url": "https://github.com/yourusername",
+  "funding_url": "https://github.com/sponsors/yourusername",
+  "license": "MIT",
+  "main": "main.py",
+  "requirements": [
+    "aiohttp>=3.8.0",
+    "pydantic>=1.10.0"
+  ],
+  "functions": [
+    {
+      "name": "get_live_scores",
+      "description": "Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sport": {
+            "type": "string",
+            "description": "Sport to check: 'basketball', 'football', or 'both'",
+            "enum": ["basketball", "football", "both"],
+            "default": "both"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_team_schedule",
+      "description": "Get upcoming schedule for a specific team",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team": {
+            "type": "string",
+            "description": "Team name",
+            "enum": ["duke", "unc", "usc", "clemson"]
+          },
+          "days": {
+            "type": "integer",
+            "description": "Number of days to look ahead",
+            "default": 7
+          }
+        },
+        "required": ["team"]
+      }
+    },
+    {
+      "name": "get_team_info",
+      "description": "Get information about tracked teams",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team": {
+            "type": "string",
+            "description": "Specific team name or 'all' for all teams",
+            "default": "all"
+          }
+        }
+      }
+    }
+  ]
+}
