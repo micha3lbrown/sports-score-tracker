@@ -28,19 +28,39 @@ class Manifest(BaseModel):
 
 class Tools:
     def __init__(self):
-        self.team_mapping = {
+        # College teams
+        self.college_team_mapping = {
             150: "Duke Blue Devils",
             153: "UNC Tar Heels", 
             2579: "USC Gamecocks",
             228: "Clemson Tigers"
         }
         
-        self.team_abbreviations = {
+        self.college_team_abbreviations = {
             150: "DUKE",
             153: "UNC",
             2579: "USC",
             228: "CLEM"
         }
+        
+        # NFL teams
+        self.nfl_team_mapping = {
+            29: "Carolina Panthers",
+            30: "Jacksonville Jaguars", 
+            3: "Chicago Bears",
+            1: "Atlanta Falcons"
+        }
+        
+        self.nfl_team_abbreviations = {
+            29: "CAR",
+            30: "JAX",
+            3: "CHI", 
+            1: "ATL"
+        }
+        
+        # Combined mappings for backwards compatibility
+        self.team_mapping = {**self.college_team_mapping, **self.nfl_team_mapping}
+        self.team_abbreviations = {**self.college_team_abbreviations, **self.nfl_team_abbreviations}
 
     async def get_team_games(self, sport: str = "basketball", league: str = "mens-college-basketball") -> List[Dict]:
         """Get games for tracked teams"""
@@ -170,22 +190,27 @@ class Tools:
         sport: str = "both"
     ) -> str:
         """
-        Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson)
+        Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson, NFL teams)
         
         Args:
-            sport: "basketball", "football", or "both" (default: "both")
+            sport: "basketball", "football", "nfl", or "both" (default: "both")
         """
         results = []
         
         if sport in ["basketball", "both"]:
             bball_games = await self.get_team_games("basketball", "mens-college-basketball")
             if bball_games:
-                results.append(self._format_games_display(bball_games, "Basketball"))
+                results.append(self._format_games_display(bball_games, "College Basketball"))
         
         if sport in ["football", "both"]:
             football_games = await self.get_team_games("football", "college-football")
             if football_games:
-                results.append(self._format_games_display(football_games, "Football"))
+                results.append(self._format_games_display(football_games, "College Football"))
+        
+        if sport in ["nfl", "both"]:
+            nfl_games = await self.get_team_games("football", "nfl")
+            if nfl_games:
+                results.append(self._format_games_display(nfl_games, "NFL"))
         
         if not results:
             return f"No games found for tracked teams in {sport}."
@@ -213,24 +238,41 @@ class Tools:
             'duke': 150,
             'unc': 153,
             'usc': 2579,
-            'clemson': 228
+            'clemson': 228,
+            'panthers': 29,
+            'carolina': 29,
+            'jaguars': 30,
+            'jacksonville': 30,
+            'bears': 3,
+            'chicago': 3,
+            'falcons': 1,
+            'atlanta': 1
         }
         
         if team_lower in name_mapping:
             team_id = name_mapping[team_lower]
         else:
-            return f"Team '{team}' not found. Available teams: duke, unc, usc, clemson"
+            return f"Team '{team}' not found. Available teams: duke, unc, usc, clemson, panthers, jaguars, bears, falcons"
         
         # Get current and upcoming games
         all_games = []
         
-        # Check both sports
-        for sport, league in [("basketball", "mens-college-basketball"), ("football", "college-football")]:
+        # Check relevant sports based on team type
+        leagues_to_check = []
+        if team_id in self.college_team_mapping:
+            # College teams - check both basketball and football
+            leagues_to_check = [("basketball", "mens-college-basketball"), ("football", "college-football")]
+        elif team_id in self.nfl_team_mapping:
+            # NFL teams - only check NFL
+            leagues_to_check = [("football", "nfl")]
+        
+        for sport, league in leagues_to_check:
             games = await self.get_team_games(sport, league)
             for game in games:
                 if (game['home_team']['id'] == str(team_id) or 
                     game['away_team']['id'] == str(team_id)):
                     game['sport'] = sport
+                    game['league'] = league
                     all_games.append(game)
         
         if not all_games:
@@ -243,6 +285,12 @@ class Tools:
         
         for game in all_games:
             sport_emoji = "🏀" if game['sport'] == "basketball" else "🏈"
+            league_label = ""
+            if game.get('league') == 'nfl':
+                league_label = " (NFL)"
+            elif game.get('league') == 'college-football':
+                league_label = " (College)"
+            
             home = game['home_team']
             away = game['away_team']
             
@@ -257,7 +305,7 @@ class Tools:
             status = game['status']['short_detail'] or game['status']['detail']
             
             game_display = f"""
-{sport_emoji} **{opponent}** ({location})
+{sport_emoji} **{opponent}** ({location}){league_label}
 📅 {status}
 🏟️ {game['venue']}
 📺 {game['broadcast'] if game['broadcast'] else 'TBD'}
@@ -279,10 +327,18 @@ class Tools:
         """
         if team.lower() == "all":
             output = ["🏀🏈 **TRACKED TEAMS** 🏈🏀\n"]
-            for team_id, team_name in self.team_mapping.items():
-                abbrev = self.team_abbreviations[team_id]
+            
+            output.append("**College Teams:**")
+            for team_id, team_name in self.college_team_mapping.items():
+                abbrev = self.college_team_abbreviations[team_id]
                 output.append(f"• **{team_name}** ({abbrev}) - ID: {team_id}")
-            output.append("\nUse commands like: get_live_scores, get_team_schedule duke")
+            
+            output.append("\n**NFL Teams:**")
+            for team_id, team_name in self.nfl_team_mapping.items():
+                abbrev = self.nfl_team_abbreviations[team_id]
+                output.append(f"• **{team_name}** ({abbrev}) - ID: {team_id}")
+            
+            output.append("\nUse commands like: get_live_scores, get_team_schedule panthers")
             return '\n'.join(output)
         else:
             # Individual team info could be expanded here

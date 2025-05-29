@@ -3,7 +3,7 @@
   "name": "Sports Score Tracker",
   "version": "1.0.0",
   "required_open_webui_version": "0.3.0",
-  "description": "Track live scores and updates for Duke, UNC, USC Gamecocks, and Clemson teams",
+  "description": "Track live scores and updates for Duke, UNC, USC Gamecocks, Clemson teams, and NFL teams (Panthers, Jaguars, Bears, Falcons)",
   "icon": "🏀",
   "author": "Your Name",
   "author_url": "https://github.com/yourusername",
@@ -17,14 +17,14 @@
   "functions": [
     {
       "name": "get_live_scores",
-      "description": "Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson)",
+      "description": "Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson, NFL teams)",
       "parameters": {
         "type": "object",
         "properties": {
           "sport": {
             "type": "string",
-            "description": "Sport to check: 'basketball', 'football', or 'both'",
-            "enum": ["basketball", "football", "both"],
+            "description": "Sport to check: 'basketball', 'football', 'nfl', or 'both'",
+            "enum": ["basketball", "football", "nfl", "both"],
             "default": "both"
           }
         }
@@ -39,7 +39,7 @@
           "team": {
             "type": "string",
             "description": "Team name",
-            "enum": ["duke", "unc", "usc", "clemson"]
+            "enum": ["duke", "unc", "usc", "clemson", "panthers", "carolina", "jaguars", "jacksonville", "bears", "chicago", "falcons", "atlanta"]
           },
           "days": {
             "type": "integer",
