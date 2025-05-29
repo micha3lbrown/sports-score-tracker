@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  sports-tracker:
+    build: .
+    container_name: sports-score-tracker
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    command: python demo.py
+
+  # Example of running specific commands
+  demo-teams:
+    build: .
+    container_name: sports-tracker-teams
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python demo.py teams
+    profiles: ["demo"]
+
+  demo-scores:
+    build: .
+    container_name: sports-tracker-scores
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python demo.py scores both
+    profiles: ["demo"]
+
+  demo-nfl:
+    build: .
+    container_name: sports-tracker-nfl
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python demo.py scores nfl
+    profiles: ["demo"]
+
+  test:
+    build: .
+    container_name: sports-tracker-test
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python test_plugin.py
+    profiles: ["test"]

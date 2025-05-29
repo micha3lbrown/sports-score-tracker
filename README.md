@@ -12,9 +12,43 @@ A plugin for tracking live scores and schedules for college teams (Duke Blue Dev
 
 ## Installation
 
-1. Copy the plugin files to your Open WebUI plugins directory
-2. Install dependencies: `pip install -r requirements.txt`
-3. Restart Open WebUI to load the plugin
+### For Open WebUI
+See [OPEN_WEBUI_SETUP.md](OPEN_WEBUI_SETUP.md) for detailed installation instructions.
+
+**Quick setup:**
+1. Go to Open WebUI Admin Panel → Functions → Add Function
+2. Copy/paste the contents of `main.py`
+3. Save and enable the function
+4. Use functions like `get_live_scores("nfl")` in your chats
+
+### Docker Demo (Local Testing)
+```bash
+# Clone the repository
+git clone https://github.com/micha3lbrown/sports-score-tracker.git
+cd sports-score-tracker
+
+# Build and run with Docker Compose
+docker-compose up
+
+# Or run specific demos:
+docker-compose --profile demo up demo-teams
+docker-compose --profile demo up demo-scores
+docker-compose --profile demo up demo-nfl
+
+# Run the full test suite
+docker-compose --profile test up test
+
+# Interactive mode
+docker-compose run --rm sports-tracker python demo.py teams
+docker-compose run --rm sports-tracker python demo.py scores nfl
+docker-compose run --rm sports-tracker python demo.py schedule panthers 14
+```
+
+### Manual Installation
+```bash
+pip install -r requirements.txt
+python test_plugin.py
+```
 
 ## Usage
 
