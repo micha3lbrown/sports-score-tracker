@@ -345,6 +345,53 @@ class Tools:
             return f"Individual team info for {team} - feature coming soon!"
 
 
-# Plugin entry point
+# Open WebUI Function class - required entry point
+class Function:
+    def __init__(self):
+        self.tools = Tools()
+    
+    async def get_live_scores(
+        self,
+        __user__: dict,
+        sport: str = "both"
+    ) -> str:
+        """
+        Get live scores for tracked teams (Duke, UNC, USC Gamecocks, Clemson, NFL teams)
+        
+        Args:
+            sport: "basketball", "football", "nfl", or "both" (default: "both")
+        """
+        return await self.tools.get_live_scores(__user__, sport)
+
+    async def get_team_schedule(
+        self,
+        __user__: dict,
+        team: str,
+        days: int = 7
+    ) -> str:
+        """
+        Get upcoming schedule for a specific team
+        
+        Args:
+            team: Team name (duke, unc, usc, clemson, panthers, jaguars, bears, falcons)
+            days: Number of days to look ahead (default: 7)
+        """
+        return await self.tools.get_team_schedule(__user__, team, days)
+
+    async def get_team_info(
+        self,
+        __user__: dict,
+        team: str = "all"
+    ) -> str:
+        """
+        Get information about tracked teams
+        
+        Args:
+            team: Specific team name or "all" for all teams (default: "all")
+        """
+        return await self.tools.get_team_info(__user__, team)
+
+
+# Legacy entry point for other uses
 def get_tools():
     return Tools()

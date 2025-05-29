@@ -19,8 +19,9 @@ curl -O https://raw.githubusercontent.com/micha3lbrown/sports-score-tracker/main
 1. Open your Open WebUI instance
 2. Go to **Admin Panel** → **Settings** → **Functions**
 3. Click **"+ Add Function"**
-4. Copy and paste the contents of `main.py` into the function editor
-5. Save the function
+4. Copy and paste the entire contents of `main.py` into the function editor
+5. Click **"Save"** - Open WebUI will automatically install dependencies
+6. Enable the function if it's not already enabled
 
 #### Method 2: File Upload
 1. In Open WebUI Admin Panel → **Functions**
@@ -120,9 +121,10 @@ get_team_info("all")          # Same as above
 - If ESPN API is down, wait and try again
 
 ### Function Call Issues
-- Make sure function names match exactly
+- Make sure function names match exactly: `get_live_scores`, `get_team_schedule`, `get_team_info`
 - Team names are case-insensitive
-- Use quotes around team names with spaces
+- If you get "No Function class found", make sure you copied the entire `main.py` file
+- The plugin requires the `Function` class to be present for Open WebUI compatibility
 
 ## Advanced Configuration
 
