@@ -9,8 +9,7 @@ git clone https://github.com/micha3lbrown/sports-score-tracker.git
 cd sports-score-tracker
 
 # Option B: Download just the plugin files
-curl -O https://raw.githubusercontent.com/micha3lbrown/sports-score-tracker/main/main.py
-curl -O https://raw.githubusercontent.com/micha3lbrown/sports-score-tracker/main/manifest.json
+curl -O https://raw.githubusercontent.com/micha3lbrown/sports-score-tracker/main/openwebui_function.py
 ```
 
 ### 2. Install in Open WebUI
@@ -19,22 +18,21 @@ curl -O https://raw.githubusercontent.com/micha3lbrown/sports-score-tracker/main
 1. Open your Open WebUI instance
 2. Go to **Admin Panel** → **Settings** → **Functions**
 3. Click **"+ Add Function"**
-4. Copy and paste the entire contents of `main.py` into the function editor
+4. Copy and paste the entire contents of `openwebui_function.py` into the function editor
 5. Click **"Save"** - Open WebUI will automatically install dependencies
 6. Enable the function if it's not already enabled
 
 #### Method 2: File Upload
 1. In Open WebUI Admin Panel → **Functions**
 2. Click **"Import Function"**
-3. Upload both `main.py` and `manifest.json`
+3. Upload `openwebui_function.py`
 4. Enable the function
 
 #### Method 3: Manual Installation
-1. Copy `main.py` and `manifest.json` to your Open WebUI functions directory:
+1. Copy `openwebui_function.py` to your Open WebUI functions directory:
    ```bash
    # Default path (adjust for your installation)
-   cp main.py /path/to/open-webui/backend/apps/webui/routers/functions/
-   cp manifest.json /path/to/open-webui/backend/apps/webui/routers/functions/
+   cp openwebui_function.py /path/to/open-webui/backend/apps/webui/routers/functions/
    ```
 2. Restart Open WebUI
 
@@ -123,8 +121,8 @@ get_team_info("all")          # Same as above
 ### Function Call Issues
 - Make sure function names match exactly: `get_live_scores`, `get_team_schedule`, `get_team_info`
 - Team names are case-insensitive
-- If you get "No Function class found", make sure you copied the entire `main.py` file
-- The plugin requires the `Function` class to be present for Open WebUI compatibility
+- If you get "No Function class found", make sure you copied the entire `openwebui_function.py` file
+- The plugin requires a `Pipe`, `Filter`, or `Action` class for Open WebUI compatibility
 
 ## Advanced Configuration
 

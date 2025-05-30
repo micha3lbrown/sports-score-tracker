@@ -17,9 +17,9 @@ See [OPEN_WEBUI_SETUP.md](OPEN_WEBUI_SETUP.md) for detailed installation instruc
 
 **Quick setup:**
 1. Go to Open WebUI Admin Panel → Functions → Add Function
-2. Copy/paste the contents of `main.py`
+2. Copy/paste the contents of `openwebui_function.py`
 3. Save and enable the function
-4. Use functions like `get_live_scores("nfl")` in your chats
+4. Select "Sports Score Tracker" from the model dropdown and chat naturally
 
 ### Docker Demo (Local Testing)
 ```bash
