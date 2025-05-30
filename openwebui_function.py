@@ -8,9 +8,7 @@ description: Track live scores for Duke, UNC, USC Gamecocks, Clemson, Panthers, 
 requirements: aiohttp
 """
 
-import asyncio
 import aiohttp
-import json
 from typing import Dict, List, Optional, Generator
 from pydantic import BaseModel, Field
 
